@@ -1,0 +1,103 @@
+Trabalho 3 - Sistemas Digitais (98G02-04)
+
+Título: Integração de Deserializador e Fila com Múltiplos Domínios de Clock
+Disciplina: Sistemas Digitais - PUCRS
+Professor: Anderson Domingues
+Autores: João Viana e Artur Kniest
+
+
+---
+
+Objetivo
+
+Implementar um sistema digital em VHDL que integre dois módulos com diferentes domínios de clock:
+
+Deserializador (100 kHz): converte bits seriais em bytes.
+
+Fila (FIFO) (10 kHz): armazena até 8 bytes em ordem de chegada.
+
+
+A integração ocorre em um módulo top, que gera internamente os clocks a partir de um sinal de 1 MHz.
+
+
+---
+
+Estrutura do Projeto
+
+.
+├── fila.vhd              -- Módulo FIFO com 8 posições
+├── deserializador.vhd    -- Módulo que converte bits em bytes (com handshake)
+├── top.vhd               -- Módulo de integração com divisão de clock
+├── tb_top.vhd            -- Testbench completo
+├── sim.do                -- Script de simulação para ModelSim
+├── wave.do               -- Script de visualização de sinais
+└── README.md             -- Este arquivo
+
+
+---
+
+Instruções de Simulação
+
+1. Abrir o ModelSim
+
+
+2. Carregar o projeto e navegar até a pasta contendo os arquivos
+
+
+3. Executar o script de simulação:
+
+
+
+do sim.do
+
+4. A simulação roda por 2 ms e abre automaticamente o wave.do com os sinais organizados
+
+
+
+
+---
+
+Casos Testados no Testbench
+
+✅ Caso 1 - Funcionamento ideal
+
+3 bytes enviados com intervalos e ack_in
+
+Deserializador monta corretamente os dados
+
+Dados entram na fila
+
+dequeue é acionado e os dados são removidos
+
+
+⚠️ Caso 2 - Fila cheia
+
+10 bytes enviados seguidos, sem dequeues
+
+Fila enche com 8 elementos
+
+Deserializador fica "travado" com status = '1' e data_ready = '1'
+
+Envio é bloqueado até que haja espaço na fila
+
+
+
+---
+
+Observações
+
+Projeto feito em VHDL;
+
+Frequências derivadas internamente
+
+Testbench cobre todos os casos exigidos
+
+
+
+---
+
+Simulação Esperada
+
+Caso 1: sistema flui com enqueue e dequeue
+
+Caso 2: deserializador trava corretamente quando a fila enche
